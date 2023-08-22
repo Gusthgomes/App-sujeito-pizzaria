@@ -12,18 +12,18 @@ import {
 
 export default function SignIn(){
 
-    const { user } = useContext(AuthContext);
+    const { singIn } = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    function handleLogin(){
+    async function handleLogin(){
 
         if(email === "" || password === ""){
             return;
         }
         
-        alert("E-mail: " + password)
+        await singIn({ email, password })
      }
 
     return(
