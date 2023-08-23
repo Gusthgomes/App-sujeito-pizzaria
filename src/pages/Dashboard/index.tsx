@@ -4,6 +4,7 @@ import { View, Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } fro
 
 export default function Dashboard(){
     //const { signOut } = useContext(AuthContext);
+    const [number, setNumber] = useState('');
 
     return(
         <SafeAreaView style={styles.container}>
@@ -14,6 +15,8 @@ export default function Dashboard(){
             placeholder="Número da mesa"
             placeholderTextColor="#f0f0f0"
             keyboardType="numeric"
+            value={number}
+            onChangeText={setNumber}
           />
           <TouchableOpacity style={styles.button}>
             <Text style={styles.table}>Abrir mesa</Text>
