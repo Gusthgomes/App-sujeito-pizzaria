@@ -1,10 +1,34 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 // import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigation } from '@react-navigation/native';
+import { StackParamsList } from '../../routes/app.routes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export default function Dashboard(){
     //const { signOut } = useContext(AuthContext);
+    const navigation = useNavigation< NativeStackNavigationProp <StackParamsList> >();
     const [number, setNumber] = useState('');
+
+    async function openOrder(){
+        if(number === ""){
+            alert("Por favor escolha uma mesa!")
+            return;
+        }
+
+        if(number === '0'){
+            alert("Número inválido!")
+            return;
+        }
+
+        if(number <= "0"){
+            alert("Opção inválida!")
+            return;
+        }
+
+        //precisa fazer a requisição, abria a mesa e navegar para a proxima pagina
+        navigation.navigate('Order', { number: number, order_id: ''})
+    }
 
     return(
         <SafeAreaView style={styles.container}>
@@ -18,7 +42,9 @@ export default function Dashboard(){
             value={number}
             onChangeText={setNumber}
           />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+          onPress={openOrder}
+           style={styles.button}>
             <Text style={styles.table}>Abrir mesa</Text>
           </TouchableOpacity>
         </SafeAreaView>
