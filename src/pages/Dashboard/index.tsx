@@ -4,6 +4,7 @@ import { View, Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } fro
 import { useNavigation } from '@react-navigation/native';
 import { StackParamsList } from '../../routes/app.routes';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { api } from "../../services/api";
 
 export default function Dashboard(){
     //const { signOut } = useContext(AuthContext);
@@ -27,7 +28,12 @@ export default function Dashboard(){
         }
 
         //precisa fazer a requisição, abria a mesa e navegar para a proxima pagina
-        navigation.navigate('Order', { number: number, order_id: ''})
+        const response = await api.post('/order', {
+            table: Number(number)
+        })
+
+        navigation.navigate('Order', { number: number, order_id: response.data.id })
+        setNumber("");
     }
 
     return(
