@@ -41,6 +41,17 @@ export default function Order(){
                  keyboardType='numeric'
                 />
             </View>
+
+            <View style={styles.actions}>
+                <TouchableOpacity style={styles.buttonAdd}>
+                    <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Avançar</Text>
+                </TouchableOpacity>
+            </View>
+
         </View>
     )
 }
@@ -88,6 +99,32 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         color: '#fff',
-
     },
+    actions:{
+        marginTop: 15,
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between'
+    },
+    buttonText: {
+        color: '#101026',
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    buttonAdd: {
+        backgroundColor: '#3fd1ff',
+        borderRadius: 4,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '20%'
+    },
+    button: {
+        backgroundColor: '#3fffa3',
+        height: 40,
+        width: '75%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+    }
 })
