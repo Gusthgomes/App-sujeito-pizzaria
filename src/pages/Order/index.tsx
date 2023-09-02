@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import { Feather } from '@expo/vector-icons';
@@ -11,11 +11,33 @@ type RouteDetailParams = {
     }
 }
 
+type CategoryProps = {
+    id: string;
+    name: string
+}
+
 type OrderRouteProps = RouteProp < RouteDetailParams, 'Order'>;
 
 export default function Order(){
     const route = useRoute<OrderRouteProps>();
     const navigation = useNavigation();
+
+    const [category, setCategory] = useState< CategoryProps[] | [] >([]);
+    const [categorySelected, setCategorySelected] = useState<CategoryProps>();
+
+    const [amount, setAmount] = useState('1')
+
+    useEffect(() => {
+        async function loadAllCategorys(){
+            const response = await api.get('/category')
+            setCategory(response.data)
+            setCategorySelected(response.data[0])
+        }
+        
+        loadAllCategorys();
+
+    }, [])
+
 
     async function handleCloseOrder(){
 
@@ -27,7 +49,7 @@ export default function Order(){
             })
 
             navigation.goBack();
-            
+
         }catch(err){
             console.error(err)
         }
@@ -42,9 +64,13 @@ export default function Order(){
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.input}>
-                <Text style={{color: '#fff'}}>Pizzas</Text>
+            {category.length !== 0 && (
+                <TouchableOpacity style={styles.input}>
+                <Text style={{color: '#fff'}}>
+                    {categorySelected?.name}
+                </Text>
             </TouchableOpacity>
+            )}
 
             <TouchableOpacity style={styles.input}>
                 <Text style={{color: '#fff'}}>Pizza de bacon</Text>
@@ -54,10 +80,10 @@ export default function Order(){
                 <Text style={styles.qtd}>Quantidade</Text>
                 <TextInput
                  style={[styles.input, {width: '60%', textAlign: 'center'}]}
-                 value='10'
-                 placeholder='1'
                  placeholderTextColor='#f0f0f0'
                  keyboardType='numeric'
+                 value={amount}
+                 onChangeText={setAmount}
                 />
             </View>
 
