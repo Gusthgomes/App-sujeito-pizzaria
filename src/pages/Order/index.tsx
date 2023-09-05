@@ -17,6 +17,11 @@ export type CategoryProps = {
     name: string
 }
 
+type ProductProps ={
+    id: string;
+    name: string
+}
+
 type OrderRouteProps = RouteProp < RouteDetailParams, 'Order'>;
 
 export default function Order(){
@@ -24,8 +29,11 @@ export default function Order(){
     const navigation = useNavigation();
 
     const [category, setCategory] = useState< CategoryProps[] | [] >([]);
-    const [categorySelected, setCategorySelected] = useState<CategoryProps>();
-    const[modalVisible, setModalVisible] = useState(false);
+    const [categorySelected, setCategorySelected] = useState<CategoryProps | undefined>();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [products, setProducts] = useState< ProductProps[] | [] >([]);
+    const [productSelected, setProductSelected] = useState< ProductProps | undefined >();
+    const [modalProductVisible, setModalProductVisible] = useState(false);
 
     const [amount, setAmount] = useState('1')
 
@@ -39,6 +47,21 @@ export default function Order(){
         loadAllCategorys();
 
     }, [])
+
+    useEffect(() => {
+        async function loadProducts(){
+            const response = await api.get('/category/product', {
+                params:{
+                    category_id: categorySelected?.id
+                }
+            })
+
+            setProducts(response.data)
+            setProductSelected(response.data[0])
+        }
+        loadProducts();
+
+    }, [categorySelected])
 
 
     async function handleCloseOrder(){
@@ -79,9 +102,13 @@ export default function Order(){
             </TouchableOpacity>
             )}
 
-            <TouchableOpacity style={styles.input}>
-                <Text style={{color: '#fff'}}>Pizza de bacon</Text>
-            </TouchableOpacity>
+            {products.length !== 0 && (
+                <TouchableOpacity style={styles.input}>
+                    <Text style={{color: '#fff'}}>
+                        {productSelected?.name}
+                    </Text>
+                </TouchableOpacity>
+            )}
 
             <View style={styles.amount}>
                 <Text style={styles.qtd}>Quantidade</Text>
