@@ -2,11 +2,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { api } from '../../services/api';
+import { StackParamsList } from '../../routes/app.routes';
 
 type RouteDetailParams = {
     FinishOrder: {
         number: string | number;
-        oder_id: string
+        order_id: string
     }
 }
 
@@ -15,9 +18,19 @@ type FinishOrderRouteProp = RouteProp<RouteDetailParams, 'FinishOrder'>
 export default function FinishOrder() {
 
     const route = useRoute<FinishOrderRouteProp>();
+    const navigation = useNavigation<NativeStackNavigationProp <StackParamsList> >();
 
     async function handleFinish(){
-        alert("clicou!")
+        try{
+            await api.put('/order/send', {
+                order_id: route.params?.order_id
+            })
+
+            navigation.popToTop();
+
+        }catch(err){
+            console.error("Erro ao finalizar o pedido", err)
+        }
     }
 
   return (
